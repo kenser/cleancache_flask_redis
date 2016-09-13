@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{{super()}}
+{% block head %}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Amaze UI Admin index Examples</title>
+  <meta name="description" content="这是一个 index 页面">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="{{url_for('static', filename='i/favicon.png')}}">
+
+  <link rel="apple-touch-icon-precomposed" href="{{url_for('static', filename='i/app-icon72x72@2x.png')}}">
+
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+
+  {% block css %}
+  {{super()}}
+  {% endblock %}
+  
+</head>
+{% endblock %}
+
+
+{% block header %}
+{{super()}}
+{% endblock %}
+
+
+{% block sidebar %}
+{{super()}}
+{% endblock %}
+
+{% block content %}
+<!-- content start -->
+<div class="admin-content">
+  <div class="admin-content-body">
+    <div class="am-cf am-padding am-padding-bottom-0">
+      <div class="am-fl am-cf">
+        <strong class="am-text-primary am-text-lg">表单</strong> /
+        <small>form</small>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="am-tabs am-margin" data-am-tabs>
+      <ul class="am-tabs-nav am-nav am-nav-tabs">
+      
+        <li><a href="#tab3">域名->nginxIP管理</a></li>
+      </ul>
+
+      <div class="am-tabs-bd">
+      
+
+        
+
+        <div class="am-tab-panel am-fade" id="tab3">
+          <form class="am-form" method="post" action={{url_for('nginxedit',domain=r.k)}}>
+            <div class="am-g am-margin-top-sm">
+              <div class="am-u-sm-4 am-u-md-2 am-text-right">
+               域名
+              </div>
+              <div class="am-u-sm-8 am-u-md-3 am-u-end">
+                <input type="text" class="am-input-sm" name="domain" readonly="readonly" value=" {{r.k}}">
+              </div>
+            </div>
+
+            <div class="am-g am-margin-top-sm">
+              <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                nginxIP地址
+              </div>
+              <div class="am-u-sm-8 am-u-md-8 am-u-end">
+                <input type="text" class="am-input-sm" name="ips" value=" {{r.v}} ">
+              </div>
+            </div>
+
+
+
+<hr />
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li style="color:red">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+
+     <div class="am-margin">
+      <button type="submit" class="am-btn am-btn-primary am-btn-xs">提交</button>
+      <button type="reset" class="am-btn am-btn-primary am-btn-xs">重置</button>
+    </div>
+
+            
+          </form>
+
+             <hr />
+            <p>注：<span style="color:red">编辑功能只能编辑IP</span>,多个IP之间请用英文逗号分开","。</p>
+            
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+  </div>
+
+  <footer class="admin-content-footer">
+    <hr>
+    <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+  </footer>
+</div>
+<!-- content end -->
+{% endblock %}
+
+
+
+{% block js %}
+{{super()}}
+{% endblock %}
+
+{% block cjs %}
+{% endblock %}
+
