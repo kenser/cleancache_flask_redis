@@ -24,7 +24,7 @@ def index():
 
 @app.route('/ccadmin/nginx', methods=['GET'])
 def nginx():
-    fenyeno = 10
+    fenyeno = 15
     hashname = 'nginxip'
     from app.utils.fenye import fenYe
     posts,allPage,curPage,allCounts,all = fenYe(request,fenyeno,hashname)
@@ -37,7 +37,7 @@ def nginx():
 @app.route('/ccadmin/nginxsearch', methods=['POST'])
 def nginxsearch():
     searchstr=request.form['searchstr'].strip()
-    fenyeno = 10
+    fenyeno = 15
     hashname = 'nginxip'
     from app.utils.fenye import fenYeSearch
     posts,allPage,curPage,allCounts,all = fenYeSearch(request,fenyeno,hashname,searchstr)
