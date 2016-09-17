@@ -42,11 +42,13 @@ def nginx():
 
 
 
-@app.route('/ccadmin/nginxsearch', methods=['POST'])
+@app.route('/ccadmin/nginxsearch', methods=['POST','GET'])
 @login_required
 def nginxsearch():
-
-    searchstr=request.form['searchstr'].strip()
+    if request.method == 'POST':
+        searchstr=request.form['searchstr'].strip()
+        session['searchstr'] = searchstr
+    searchstr = session.get('searchstr')
     fenyeno = 15
     hashname = 'nginxip'
     from app.utils.fenye import fenYeSearch
