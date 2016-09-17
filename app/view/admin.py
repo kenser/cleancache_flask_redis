@@ -4,26 +4,33 @@ import json
 from app import app
 from app import redis_store
 from app import api
+from functools import wraps
+
+username = redis_store.hget('user','username')
 
 @app.errorhandler(401)
 def not_auth(error):
     return redirect(url_for('login'))
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        username = redis_store.hget('user','username')
+        if username != session.get('username'):
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @app.route('/ccadmin', methods=['GET', 'POST'])
+@login_required
 def index():
-    username = redis_store.hget('user','username')
-    
-    if username == session.get('username'):
-        #持久化redis数据到硬盘
-        redis_store.save()
-        return render_template('index.html', username=username)
-    else:
-        return redirect(url_for('login')) 
+    return render_template('index.html', username=username)
 
 @app.route('/ccadmin/nginx', methods=['GET'])
+@login_required
 def nginx():
+    
     fenyeno = 15
     hashname = 'nginxip'
     from app.utils.fenye import fenYe
@@ -34,13 +41,12 @@ def nginx():
     return render_template('nginx/table.html',r=r)
 
 
-@app.route('/ccadmin/nginxsearch', methods=['POST','GET'])
+
+@app.route('/ccadmin/nginxsearch', methods=['POST'])
+@login_required
 def nginxsearch():
-    if request.method == 'POST':
-        searchstr=request.form['searchstr'].strip()
-        session['searchstr'] = searchstr
-    searchstr = session.get('searchstr') 
-    print(searchstr)
+
+    searchstr=request.form['searchstr'].strip()
     fenyeno = 15
     hashname = 'nginxip'
     from app.utils.fenye import fenYeSearch
@@ -48,9 +54,11 @@ def nginxsearch():
     addno = fenyeno * (curPage - 1)
     lists = range(1,allPage+1)
     r = {'posts':posts,'allPage':allPage,'curPage':curPage,'addno':addno,'lists':lists,'allCounts':allCounts,'all':all}
-    return render_template('nginx/tablesearch.html',r=r)
+    return render_template('nginx/table.html',r=r)
+
 
 @app.route('/ccadmin/nginxedit/<domain>', methods=['GET','POST'])
+@login_required
 def nginxedit(domain):
     if request.method == 'POST':
         ipsstr=request.form['ips'].strip()
@@ -79,6 +87,7 @@ def nginxedit(domain):
 
 
 @app.route('/ccadmin/nginxdel/<domain>', methods=['GET'])
+@login_required
 def nginxdel(domain):
     k=domain
     redis_store.hdel('nginxip',k)
@@ -86,6 +95,7 @@ def nginxdel(domain):
 
 
 @app.route('/ccadmin/nginxadd', methods=['GET','POST'])
+@login_required
 def nginxadd():
     if request.method == 'POST':
         domain=request.form['domain'].strip()
