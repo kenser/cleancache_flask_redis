@@ -6,7 +6,6 @@ from app import redis_store
 from app import api
 from functools import wraps
 
-username = redis_store.hget('user','username')
 
 @app.errorhandler(401)
 def not_auth(error):
@@ -25,7 +24,7 @@ def login_required(f):
 @app.route('/ccadmin', methods=['GET', 'POST'])
 @login_required
 def index():
-    return render_template('index.html', username=username)
+    return render_template('index.html')
 
 @app.route('/ccadmin/nginx', methods=['GET'])
 @login_required

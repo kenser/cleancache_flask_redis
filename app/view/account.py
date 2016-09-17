@@ -29,11 +29,9 @@ def login():
             return redirect(url_for('login'))
     #如果session存在则直接跳到管理首页
     if session.get('username') == user.username:
-        #持久化redis数据到硬盘
-        redis_store.save()
         return redirect(url_for('index'))
         
-    return render_template('account/login.html', username=session.get('username'))
+    return render_template('account/login.html')
 
 @app.route('/cclogout', methods=['GET'])
 def logout():
