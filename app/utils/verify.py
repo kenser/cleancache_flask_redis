@@ -1,7 +1,11 @@
 import socket
 def verify_ip(address):
+    s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(1)
     try:
-        socket.inet_aton(address)
+        s.connect((address,80))
+        s.close()
+        #socket.inet_aton(address)
         return True
     except:
         return False
