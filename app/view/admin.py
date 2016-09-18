@@ -55,7 +55,7 @@ def nginxsearch():
     addno = fenyeno * (curPage - 1)
     lists = range(1,allPage+1)
     r = {'posts':posts,'allPage':allPage,'curPage':curPage,'addno':addno,'lists':lists,'allCounts':allCounts,'all':all}
-    return render_template('nginx/table.html',r=r)
+    return render_template('nginx/tablesearch.html',r=r)
 
 
 @app.route('/ccadmin/nginxedit/<domain>', methods=['GET','POST'])
