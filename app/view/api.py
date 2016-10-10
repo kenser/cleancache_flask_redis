@@ -34,9 +34,7 @@ def lbAlert():
         message = json.loads(all["Message"])
         # print message["AlarmName"]
         # print message["NewStateReason"]
-        content = "AlarmName:\"" + \
-            str(message["AlarmName"]) + "\"," + "NewStateReason:\"" + \
-            str(message["NewStateReason"]) + "\""
+        content = "AlarmName:\"" + str(message["AlarmName"]) + "\"" 
 
         #从redis中读取weChat相关配置参数
         weurl = redis_store.hget('wechat','weurl')
