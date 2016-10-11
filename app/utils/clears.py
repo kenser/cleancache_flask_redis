@@ -39,7 +39,7 @@ def clearnginx(urlstr,remote_ip):
             result = {'status':'error','message': message}
             logs(message+" "+remote_ip) 
             return result 
-    except ConfigParser.NoOptionError :
+    except Exception:
         message = "url %s hostname %s Not nginx cached" % (urlstr,hostname)
         result = {'status':'error','message': message} 
         logs(message+" "+remote_ip)
@@ -83,7 +83,7 @@ def logs(message):
     try:
         logpath = config.LOG_PATH
         logname = config.LOG_NAME
-    except ConfigParser.NoOptionError :
+    except Exception:
         pass
     mkDir(logpath)
     logging.basicConfig(level=logging.INFO,
