@@ -47,8 +47,15 @@ def clearnginx(urlstr,remote_ip):
 
     message = ""
     
+    #判断对应的ip80端口是否还在启用状态
+    from app.utils.verify import verify_ip
+    ips80 = []
+    for ip80 in ips:
+        if verify_ip(ip80) is True:
+            ips80.append(ip80) 
+
     #执行nginx purge cache
-    for ip in ips:
+    for ip in ips80:
         headers = {'host':hostname}
         purgeurl = "http://"+ip+"/purge"+urlpath
         rhtml = requests.get(purgeurl,headers=headers,timeout=15)
