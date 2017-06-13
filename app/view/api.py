@@ -66,9 +66,11 @@ def get_url():
     from app.utils.clears import clearcdn
     remote_ip = request.remote_addr
     resultnginx = clearnginx(urlstr, remote_ip)
-    resultcdn = clearcdn(urlstr, remote_ip)
+    #networks = ('production','staging')
+    resultproduction = clearcdn(urlstr, remote_ip, network='production')
+    resultstaging = clearcdn(urlstr, remote_ip, network='staging')
     results = {'results': [{"url": urlstr}, {"type": "nginx", "result": resultnginx}, {
-        "type": "akamai_cdn", "result": resultcdn}]}
+        "production": resultproduction, "staging": resultstaging}]}
     return jsonify(results)
 
 

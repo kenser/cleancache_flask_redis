@@ -5,6 +5,7 @@ import logging
 from bs4 import BeautifulSoup
 import re
 import os
+import json
 
 import sys
 reload(sys)
@@ -69,21 +70,20 @@ def clearnginx(urlstr,remote_ip):
     logs("url "+ urlstr +message+" "+remote_ip)
     return result 
 
-def clearcdn(urlstr,remote_ip):
+def clearcdn(urlstr,remote_ip, network):
     #从redis读取akamai相关配置参数
     from app import redis_store
-    weurl = redis_store.hget('wechat','weurl')
+    #weurl = redis_store.hget('wechat','weurl')
 
-    akamaiusername = redis_store.hget('akamai','username')
-    akamaipassword = redis_store.hget('akamai','password')
-    apiurl = redis_store.hget('akamai','apiurl')
-
+    #akamaiusername = redis_store.hget('akamai','username')
+    #akamaipassword = redis_store.hget('akamai','password')
+    apiurl = redis_store.hget('akamaiv3','apiurl')
     #执行akamai clear cdn cache
     headers = {'content-type': 'application/json'}
-    data = '{"objects":["%s"]}' % urlstr
-    r = str((requests.post(apiurl,data=data,headers=headers,auth=(akamaiusername, akamaipassword))).text)
-    logs("url "+ urlstr + r + remote_ip)
-    return r
+    data = '{"clean_url":"%s","network":"%s"}' % (urlstr,network)
+    r = requests.post(apiurl,data=data,headers=headers)
+    logs("url "+ urlstr + str(r) + remote_ip)
+    return r.json()
 
 def logs(message):
     from app import config
