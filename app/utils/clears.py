@@ -62,9 +62,14 @@ def clearnginx(urlstr,remote_ip):
         rhtml = requests.get(purgeurl,headers=headers,timeout=15)
         httpStatus = str(rhtml.status_code)
         soup = BeautifulSoup(str(rhtml.text).replace("\r\n",""),"html.parser")
-        key = str(soup.find_all(text=re.compile("Key")))
-        path =  str(soup.find_all(text=re.compile("Path")))
-        title = str(soup.title)
+        if httpStatus == '404':
+            key = "no key"
+            path = "no path"
+            title = "404"
+        else:
+            key = str(soup.find_all(text=re.compile("Key")))
+            path =  str(soup.find_all(text=re.compile("Path")))
+            title = str(soup.title)
         message += " nginx_ip : %s ,httpStatus : %s ,title : %s ,key : %s ,path : %s "  % (ip,httpStatus,title,key,path)
     result = {'status':'success','message':message}
     logs("url "+ urlstr +message+" "+remote_ip)
